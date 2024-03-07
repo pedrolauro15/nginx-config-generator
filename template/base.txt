@@ -1,0 +1,20 @@
+##Created by Pedro Lauro
+
+upstream {{upstreamName}} {
+  keepalive 100;
+  server {{serviceIp}}:{{servicePort}}; 
+}
+
+server {
+
+   server_name {{upstreamUri}};
+    client_max_body_size 100M;
+
+    location ~ / {
+        proxy_set_header Access-Control-Allow-Origin *;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://{{upstreamName}};
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}
